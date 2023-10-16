@@ -4,6 +4,7 @@ using Etiqa.Domain;
 using Etiqa.Domain.Context;
 using Etiqa.Repository;
 using Etiqa.Repository.Contract;
+using Etiqa.Security;
 using Etiqa.Services.Contract;
 using Etiqa.Services.Services;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,8 @@ ConfigurationManager configuration = builder.Configuration;
 
     builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 
+    builder.Services.AddScoped(typeof(ApiKeyAuthFilterAsync));
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -56,6 +59,7 @@ var app = builder.Build();
 
     app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
+    //app.UseMiddleware<ApiKeyAuthMiddleware>();
     app.UseAuthorization();
     app.MapControllers();
     app.Run();

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Etiqa.Domain.ApiModels;
+using Etiqa.Security;
 using Etiqa.Services.Contract;
 using Microsoft.AspNetCore.Mvc;
 using dm = Etiqa.Domain.DataModels;
@@ -24,6 +25,7 @@ namespace Etiqa.Web.Controllers
             this.logger = logger;
         }
 
+        [ServiceFilter(typeof(ApiKeyAuthFilterAsync))]
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
@@ -45,6 +47,7 @@ namespace Etiqa.Web.Controllers
                 errors => Problem(errors));
         }
 
+        [ServiceFilter(typeof(ApiKeyAuthFilterAsync))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, UpdateUserRequest request)
         {
@@ -54,6 +57,7 @@ namespace Etiqa.Web.Controllers
             return Accepted();
         }
 
+        [ServiceFilter(typeof(ApiKeyAuthFilterAsync))]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
