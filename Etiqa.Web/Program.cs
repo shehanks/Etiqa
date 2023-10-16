@@ -8,6 +8,7 @@ using Etiqa.Security;
 using Etiqa.Services.Contract;
 using Etiqa.Services.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +37,33 @@ ConfigurationManager configuration = builder.Configuration;
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+        {
+            Description = "Api Key is required to access the API.",
+            Type = SecuritySchemeType.ApiKey,
+            Name = "x-api-key",
+            In = ParameterLocation.Header,
+            Scheme = "ApiKeySchema"
+        });
+
+        var scheme = new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "ApiKey"
+            },
+            In = ParameterLocation.Header,
+        };
+
+        var requirement = new OpenApiSecurityRequirement
+        {
+            { scheme, new List<string>() }
+        };
+        c.AddSecurityRequirement(requirement);
+    });
 }
 // Configure auto-mapper.
 {
