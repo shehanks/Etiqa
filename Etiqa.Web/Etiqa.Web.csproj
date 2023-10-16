@@ -7,12 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="ErrorOr" Version="1.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Etiqa.DataAccess\Etiqa.DataAccess.csproj" />
     <ProjectReference Include="..\Etiqa.Domain\Etiqa.Domain.csproj" />
+    <ProjectReference Include="..\Etiqa.Repository.Contract\Etiqa.Repository.Contract.csproj" />
+    <ProjectReference Include="..\Etiqa.Repository\Etiqa.Repository.csproj" />
+    <ProjectReference Include="..\Etiqa.Services.Contract\Etiqa.Services.Contract.csproj" />
+    <ProjectReference Include="..\Etiqa.Services\Etiqa.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,6 +19,6 @@ namespace Etiqa.Domain.DataModels
         public string? PhoneNo { get; set; }
         public string? Hobby { get; set; }
 
-        public ICollection<UserSkill> UserSkills = new List<UserSkill>();
+        public ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
     }
 }

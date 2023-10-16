@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.Web", "Etiqa.Web\Etiq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.Domain", "Etiqa.Domain\Etiqa.Domain.csproj", "{8037B8E9-333F-4993-B1A0-18173D77D7E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.DataAccess", "Etiqa.DataAccess\Etiqa.DataAccess.csproj", "{789323CD-4177-4E15-901C-A6DE1D30141E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.Repository", "Etiqa.Repository\Etiqa.Repository.csproj", "{4965E02E-4EB0-4C45-9F92-9E40A27A440F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.Repository.Contract", "Etiqa.Repository.Contract\Etiqa.Repository.Contract.csproj", "{3D4681A1-03BD-41B1-A2B1-B8EB2E254F78}"
@@ -16,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.Services.Contract", "Etiqa.Services.Contract\Etiqa.Services.Contract.csproj", "{1327E099-136B-4A20-94ED-DE89340CFCBA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.Services", "Etiqa.Services\Etiqa.Services.csproj", "{B4AEE05D-4843-4FE5-881A-74C3F905AB0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Etiqa.DataAccess", "Etiqa.DataAccess\Etiqa.DataAccess.csproj", "{652B4A3B-D9A0-4ADB-97FB-60AE87E72235}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,6 @@ Global
 		{8037B8E9-333F-4993-B1A0-18173D77D7E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8037B8E9-333F-4993-B1A0-18173D77D7E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8037B8E9-333F-4993-B1A0-18173D77D7E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{789323CD-4177-4E15-901C-A6DE1D30141E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{789323CD-4177-4E15-901C-A6DE1D30141E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{789323CD-4177-4E15-901C-A6DE1D30141E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{789323CD-4177-4E15-901C-A6DE1D30141E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4965E02E-4EB0-4C45-9F92-9E40A27A440F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4965E02E-4EB0-4C45-9F92-9E40A27A440F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4965E02E-4EB0-4C45-9F92-9E40A27A440F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{B4AEE05D-4843-4FE5-881A-74C3F905AB0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4AEE05D-4843-4FE5-881A-74C3F905AB0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4AEE05D-4843-4FE5-881A-74C3F905AB0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{652B4A3B-D9A0-4ADB-97FB-60AE87E72235}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{652B4A3B-D9A0-4ADB-97FB-60AE87E72235}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{652B4A3B-D9A0-4ADB-97FB-60AE87E72235}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{652B4A3B-D9A0-4ADB-97FB-60AE87E72235}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

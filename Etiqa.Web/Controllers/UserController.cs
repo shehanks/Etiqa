@@ -1,34 +1,67 @@
-﻿using Etiqa.Domain.ClientModels;
+﻿using AutoMapper;
+using Etiqa.Domain.ApiModels;
+using Etiqa.Services.Contract;
 using Microsoft.AspNetCore.Mvc;
+using dm = Etiqa.Domain.DataModels;
 
 namespace Etiqa.Web.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController : ApiControllerBase
     {
-        [HttpPost]
-        public IActionResult Create(CreateUserRequest request)
+        private readonly ILogger<UserController> logger;
+
+        private readonly IUserService userService;
+
+        private readonly IMapper mapper;
+
+        public UserController(
+            IUserService userService,
+            IMapper mapper,
+            ILogger<UserController> logger)
         {
-            return Ok(200);
+            this.userService = userService;
+            this.mapper = mapper;
+            this.logger = logger;
         }
 
-        [HttpGet("{id:int}")]
-        public IActionResult Get(int id)
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateUserRequest request)
         {
-            return Ok(id);
+            var user = mapper.Map<dm.User>(request);
+            var clientUser = await userService.AddUserAsync(user);
+            return CreatedAtRoute(
+                nameof(Get),
+                routeValues: new { id = user.Id },
+                clientUser);
+        }
+
+        [HttpGet("{id:int}", Name = "Get")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var errorOrUser = await userService.GetUserAsync(id);
+
+            return errorOrUser.Match(
+                user => Ok(user),
+                errors => Problem(errors));
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult Update(int id, UpdateUserRequest request)
+        public async Task<IActionResult> Update(int id, UpdateUserRequest request)
         {
-            return Ok(id);
+            var user = mapper.Map<dm.User>(request);
+            user.Id = id;
+            await userService.UpdateUserAsync(user);
+            return Accepted();
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok(id);
+            var deleted = await userService.DeleteUserAsync(id);
+
+            return deleted.Match(
+                del => Accepted(del),
+                errors => Problem(errors));
         }
     }
 }

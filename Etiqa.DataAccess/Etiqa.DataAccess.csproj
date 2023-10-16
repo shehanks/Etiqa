@@ -7,11 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Etiqa.Domain\Etiqa.Domain.csproj" />
+    <ProjectReference Include="..\Etiqa.Repository.Contract\Etiqa.Repository.Contract.csproj" />
+    <ProjectReference Include="..\Etiqa.Repository\Etiqa.Repository.csproj" />
   </ItemGroup>
 
 </Project>
