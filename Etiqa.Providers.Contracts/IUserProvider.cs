@@ -10,10 +10,12 @@ namespace Etiqa.Providers.Contracts
 
         Task<cm.User> GetUserAsync(int id);
 
-        Task<IEnumerable<cm.User>> GetUsers(UserListLoadOptions loadOptions);
+        Task<IEnumerable<cm.User>> GetUsersAsync(UserListLoadOptions loadOptions);
 
         Task UpdateUserAsync(dm.User user);
 
         Task<bool> DeleteUserAsync(int id);
+
+        Task<cm.User?> GetUserAsync(string? userName, string? email);
     }
 }

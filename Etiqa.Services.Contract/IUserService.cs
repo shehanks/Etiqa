@@ -8,13 +8,13 @@ namespace Etiqa.Services.Contract
 {
     public interface IUserService : IServiceBase<dm.User, UserListLoadOptions>
     {
-        Task<cm.User> AddUserAsync(dm.User user);
+        Task<ErrorOr<cm.User>> AddUserAsync(dm.User user);
 
         Task<ErrorOr<cm.User>> GetUserAsync(int id);
 
-        Task<ErrorOr<UserList>> GetUsers(UserListLoadOptions loadOptions);
+        Task<ErrorOr<UserList>> GetUsersAsync(UserListLoadOptions loadOptions);
 
-        Task UpdateUserAsync(dm.User user);
+        Task<ErrorOr<bool>> UpdateUserAsync(dm.User user);
 
         Task<ErrorOr<bool>> DeleteUserAsync(int id);
     }

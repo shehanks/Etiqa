@@ -1,5 +1,4 @@
 ﻿using Etiqa.Domain.DataModels;
-using dm = Etiqa.Domain.DataModels;
 
 namespace Etiqa.Repository.Contract
 {
@@ -7,6 +6,8 @@ namespace Etiqa.Repository.Contract
     {
         // Add method definitions of repository specific methods if required.
         // Override base repository methods if required.
-        Task<dm.User?> GetUserByIdAsync(int id);
+        Task<User?> GetUserByIdAsync(int id);
+
+        Task<User?> GetUserAsync(string? userName, string? email);
     }
 }

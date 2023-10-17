@@ -35,7 +35,7 @@ namespace Etiqa.Providers
             return mapper.Map<User>(user);
         }
 
-        public async Task<IEnumerable<User>> GetUsers(UserListLoadOptions loadOptions)
+        public async Task<IEnumerable<User>> GetUsersAsync(UserListLoadOptions loadOptions)
         {
             var users = await unitOfWork.UserRepository.GetAsync(
                 filter: string.IsNullOrEmpty(loadOptions.email) ?
@@ -69,6 +69,12 @@ namespace Etiqa.Providers
             await unitOfWork.UserRepository.DeleteAsync(user);
             await unitOfWork.CompleteAsync();
             return true;
+        }
+
+        public async Task<User?> GetUserAsync(string? userName, string? email)
+        {
+            var user = await unitOfWork.UserRepository.GetUserAsync(userName, email);
+            return mapper.Map<User>(user);
         }
     }
 }

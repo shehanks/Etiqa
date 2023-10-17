@@ -31,8 +31,12 @@ namespace Etiqa.Services.Services
             this.cacheService = cacheService;
         }
 
-        public async Task<User> AddUserAsync(dm.User user)
+        public async Task<ErrorOr<User>> AddUserAsync(dm.User user)
         {
+            var existingUser = await userProvider.GetUserAsync(user.Username, user.Email);
+            if (existingUser != null)
+                return Errors.User.Validation;
+
             return await userProvider.AddUserAsync(user);
         }
 
@@ -53,7 +57,7 @@ namespace Etiqa.Services.Services
             return user;
         }
 
-        public async Task<ErrorOr<UserList>> GetUsers(UserListLoadOptions loadOptions)
+        public async Task<ErrorOr<UserList>> GetUsersAsync(UserListLoadOptions loadOptions)
         {
             var cacheKey = MakeListCacheKey(loadOptions);
             var cacheUsers = cacheService.GetData<UserList>(cacheKey);
@@ -64,17 +68,22 @@ namespace Etiqa.Services.Services
             if (loadOptions.page <= 0 || loadOptions.pageSize <= 0)
                 return Errors.User.Validation;
 
-            var users = await userProvider.GetUsers(loadOptions);
+            var users = await userProvider.GetUsersAsync(loadOptions);
             var userList = mapper.Map<UserList>(users);
             cacheService.SetData(cacheKey, userList);
             return userList;
         }
 
-        public async Task UpdateUserAsync(dm.User user)
+        public async Task<ErrorOr<bool>> UpdateUserAsync(dm.User user)
         {
+            var existingUser = await userProvider.GetUserAsync(user.Username, user.Email);
+            if (existingUser != null)
+                return Errors.User.Validation;
+
             await userProvider.UpdateUserAsync(user);
             cacheService.RemoveData(MakeCacheKey(MakeCacheKey(user.Id)));
             cacheService.RemoveByPrefix(cacheKeyListPrefix);
+            return true;
         }
 
         public async Task<ErrorOr<bool>> DeleteUserAsync(int id)

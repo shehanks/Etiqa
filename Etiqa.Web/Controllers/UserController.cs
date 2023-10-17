@@ -26,11 +26,14 @@ namespace Etiqa.Web.Controllers
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
             var user = mapper.Map<dm.User>(request);
-            var clientUser = await userService.AddUserAsync(user);
+            var errorOrUser = await userService.AddUserAsync(user);
+            if (errorOrUser.IsError)
+                return Problem(errorOrUser.Errors);
+
             return CreatedAtRoute(
                 nameof(Get),
                 routeValues: new { id = user.Id },
-                clientUser);
+                errorOrUser.Value);
         }
 
         [HttpGet("{id:int}", Name = "Get")]
@@ -47,7 +50,7 @@ namespace Etiqa.Web.Controllers
         [Route("GetUsers")]
         public async Task<IActionResult> GetUsers(UserListLoadOptions loadOptions)
         {
-            var errorOrUsers = await userService.GetUsers(loadOptions);
+            var errorOrUsers = await userService.GetUsersAsync(loadOptions);
 
             return errorOrUsers.Match(
                 users => Ok(users.Users),
@@ -60,8 +63,11 @@ namespace Etiqa.Web.Controllers
         {
             var user = mapper.Map<dm.User>(request);
             user.Id = id;
-            await userService.UpdateUserAsync(user);
-            return Accepted();
+            var errorOrUpdated = await userService.UpdateUserAsync(user);
+
+            return errorOrUpdated.Match(
+                users => Accepted(),
+                errors => Problem(errors));
         }
 
         [ServiceFilter(typeof(ApiKeyAuthFilterAsync))]
