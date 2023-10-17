@@ -9,20 +9,16 @@ namespace Etiqa.Web.Controllers
 {
     public class UserController : ApiControllerBase
     {
-        private readonly ILogger<UserController> logger;
-
         private readonly IUserService userService;
 
         private readonly IMapper mapper;
 
         public UserController(
             IUserService userService,
-            IMapper mapper,
-            ILogger<UserController> logger)
+            IMapper mapper)
         {
             this.userService = userService;
             this.mapper = mapper;
-            this.logger = logger;
         }
 
         [ServiceFilter(typeof(ApiKeyAuthFilterAsync))]

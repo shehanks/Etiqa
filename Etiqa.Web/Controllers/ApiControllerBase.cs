@@ -7,8 +7,6 @@ namespace Etiqa.Web.Controllers
     [Route("[controller]")]
     public class ApiControllerBase : ControllerBase
     {
-        private readonly ILogger<UserController> logger;
-
         protected IActionResult Problem(List<Error> errors)
         {
             var firstError = errors.First();
