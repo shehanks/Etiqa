@@ -1,19 +1,18 @@
 ﻿using Etiqa.Domain.DataModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
-namespace Etiqa.DataAccess
+namespace Etiqa.Domain.Context
 {
     public class EtiqaDbContext : DbContext
     {
         private static DbContextOptions dbContextOptions;
 
-        public EtiqaDbContext() 
+        public EtiqaDbContext()
             : base(dbContextOptions)
-        {    
+        {
         }
 
-        public EtiqaDbContext(DbContextOptions<EtiqaDbContext> options) 
+        public EtiqaDbContext(DbContextOptions<EtiqaDbContext> options)
             : base(options)
         {
             dbContextOptions = options;
