@@ -9,6 +9,10 @@ namespace Etiqa.Services.ServiceErrors
             public static Error NotFound => Error.NotFound(
                 code: "User.NotFound",
                 description: "User not found");
+
+            public static Error Validation => Error.Validation(
+                code: "User.InvalidRequest",
+                description: "Invalid request.");
         }
     }
 }

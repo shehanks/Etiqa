@@ -13,6 +13,9 @@ namespace Etiqa.Web.Controllers
         }
 
         [HttpGet]
+        [HttpPost]
+        [HttpPut]
+        [HttpDelete]
         [Route("/error")]
         public IActionResult Error()
         {
@@ -24,7 +27,7 @@ namespace Etiqa.Web.Controllers
             var problemDetails = new ProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,
-                Title = "An unexpected error occurred",
+                Title = "An unexpected error occurred. Check the logs for more details.",
                 Detail = exception?.Message
             };
 

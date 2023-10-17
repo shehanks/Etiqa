@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Etiqa.Domain.ApiModels;
+using Etiqa.Domain.RequestModels;
 using Etiqa.Security;
 using Etiqa.Services.Contract;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +40,17 @@ namespace Etiqa.Web.Controllers
 
             return errorOrUser.Match(
                 user => Ok(user),
+                errors => Problem(errors));
+        }
+
+        [HttpPost]
+        [Route("GetUsers")]
+        public async Task<IActionResult> GetUsers(UserListLoadOptions loadOptions)
+        {
+            var errorOrUsers = await userService.GetUsers(loadOptions);
+
+            return errorOrUsers.Match(
+                users => Ok(users.Users),
                 errors => Problem(errors));
         }
 

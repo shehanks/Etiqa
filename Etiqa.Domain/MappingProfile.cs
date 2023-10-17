@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Etiqa.Domain.ApiModels;
+using Etiqa.Domain.ClientModels;
+using Etiqa.Domain.RequestModels;
 using cm = Etiqa.Domain.ClientModels;
 using dm = Etiqa.Domain.DataModels;
 
@@ -17,6 +18,9 @@ namespace Etiqa.Domain
 
             CreateMap<UpdateUserRequest, dm.User>().
                 ForMember(d => d.UserSkills, opt => opt.MapFrom(s => s.UserSkill.Select(us => new dm.UserSkill() { Skill = us })));
+
+            CreateMap<IEnumerable<cm.User>, UserList>().
+                ForMember(d => d.Users, opt => opt.MapFrom(s => s));
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using ErrorOr;
-using Etiqa.DataAccess;
 using Etiqa.Domain.ClientModels;
+using Etiqa.Domain.RequestModels;
+using Etiqa.Providers.Contracts;
 using Etiqa.Services.Contract;
 using Etiqa.Services.ServiceErrors;
 using dm = Etiqa.Domain.DataModels;
@@ -10,56 +11,100 @@ namespace Etiqa.Services.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private const string cacheKeyJoiner = "_";
+        private const string cacheKeyPrefix = "user";
+        private const string cacheKeyListPrefix = "userList";
 
         private readonly IMapper mapper;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IUserProvider userProvider;
+
+        private readonly ICacheService cacheService;
+
+        public UserService(
+            IMapper mapper,
+            IUserProvider userProvider,
+            ICacheService cacheService)
         {
-            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.userProvider = userProvider;
+            this.cacheService = cacheService;
         }
 
         public async Task<User> AddUserAsync(dm.User user)
         {
-            await unitOfWork.UserRepository.InsertAsync(user);
-            if (user.UserSkills.Any())
-                await unitOfWork.UserSkillRepository.InsertRangeAsync(user.UserSkills);
-
-            await unitOfWork.CompleteAsync();
-            return mapper.Map<User>(user);
+            return await userProvider.AddUserAsync(user);
         }
 
         public async Task<ErrorOr<User>> GetUserAsync(int id)
         {
-            var user = await unitOfWork.UserRepository.GetUserByIdAsync(id);
+            var cacheKey = MakeCacheKey(id);
+            var cacheUser = cacheService.GetData<User>(cacheKey);
+
+            if (cacheUser != null)
+                return cacheUser;
+
+            var user = await userProvider.GetUserAsync(id);
             if (user == null)
                 return Errors.User.NotFound;
 
-            return mapper.Map<User>(user);
+            cacheService.SetData(cacheKey, user);
+            cacheService.RemoveByPrefix(cacheKeyListPrefix);
+            return user;
+        }
+
+        public async Task<ErrorOr<UserList>> GetUsers(UserListLoadOptions loadOptions)
+        {
+            var cacheKey = MakeListCacheKey(loadOptions);
+            var cacheUsers = cacheService.GetData<UserList>(cacheKey);
+
+            if (cacheUsers != null)
+                return cacheUsers;
+
+            if (loadOptions.page <= 0 || loadOptions.pageSize <= 0)
+                return Errors.User.Validation;
+
+            var users = await userProvider.GetUsers(loadOptions);
+            var userList = mapper.Map<UserList>(users);
+            cacheService.SetData(cacheKey, userList);
+            return userList;
         }
 
         public async Task UpdateUserAsync(dm.User user)
         {
-            await unitOfWork.UserRepository.UpdateAsync(user);
-            await unitOfWork.CompleteAsync();
+            await userProvider.UpdateUserAsync(user);
+            cacheService.RemoveData(MakeCacheKey(MakeCacheKey(user.Id)));
+            cacheService.RemoveByPrefix(cacheKeyListPrefix);
         }
 
         public async Task<ErrorOr<bool>> DeleteUserAsync(int id)
         {
-            var user = await unitOfWork.UserRepository.GetUserByIdAsync(id);
-            if (user == null)
+            cacheService.RemoveData(MakeCacheKey(id));
+            var deleted = await userProvider.DeleteUserAsync(id);
+            if (!deleted)
                 return Errors.User.NotFound;
 
-            if (user.UserSkills.Any())
-            {
-                foreach (var item in user.UserSkills)
-                    await unitOfWork.UserSkillRepository.DeleteAsync(item);
-            }
-
-            await unitOfWork.UserRepository.DeleteAsync(user);
-            await unitOfWork.CompleteAsync();
+            cacheService.RemoveByPrefix(cacheKeyListPrefix);
             return true;
         }
+
+        public string MakeCacheKey(object id) => string.Join(
+            cacheKeyJoiner,
+            cacheKeyPrefix,
+            id);
+
+        public string MakeCacheKey(dm.User entity) => string.Join(
+            cacheKeyJoiner,
+            cacheKeyPrefix,
+            entity.Id,
+            entity.Username,
+            entity.Email);
+
+        public string MakeListCacheKey(UserListLoadOptions loadOptions) => string.Join(
+            cacheKeyJoiner,
+            cacheKeyListPrefix,
+            loadOptions.page,
+            loadOptions.pageSize,
+            loadOptions.email);
     }
 }

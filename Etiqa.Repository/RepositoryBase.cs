@@ -58,7 +58,7 @@ namespace Etiqa.Repository
 
         public virtual async Task<TEntity?> GetByIdAsync(object id) => await dbSet.FindAsync(id);
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync() => await dbSet.ToListAsync();
+        public async Task<IEnumerable<TEntity>> GetAllAsync() => await dbSet.AsNoTracking().ToListAsync();
 
         public virtual async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>>? filter = null,
@@ -70,29 +70,20 @@ namespace Etiqa.Repository
             IQueryable<TEntity> query = dbSet;
 
             if (filter != null)
-            {
                 query = query.Where(filter);
-            }
 
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
                 query = query.Include(includeProperty);
-            }
-            if (orderBy != null)
-            {
-                query = orderBy(query);
-            }
-            if (skip.HasValue)
-            {
-                query = query.Skip(skip.Value);
-            }
-            if (take.HasValue)
-            {
-                query = query.Take(take.Value);
-            }
 
-            return await query.ToListAsync();
+            if (orderBy != null)
+                query = orderBy(query);
+            if (skip.HasValue)
+                query = query.Skip(skip.Value);
+            if (take.HasValue)
+                query = query.Take(take.Value);
+
+            return await query.AsNoTracking().ToListAsync();
         }
     }
 }

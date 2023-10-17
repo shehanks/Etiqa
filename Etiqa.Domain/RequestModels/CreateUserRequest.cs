@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Etiqa.Domain.ApiModels
+namespace Etiqa.Domain.RequestModels
 {
-    public record UpdateUserRequest(
+    public record CreateUserRequest(
         [Required] string Username,
         [Required, EmailAddress] string Email,
         [Required] string PhoneNo,
-        string Hobby,
-        IEnumerable<string> UserSkill);
+        string? Hobby,
+        IEnumerable<string>? UserSkill);
 }

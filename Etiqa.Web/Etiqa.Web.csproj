@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Etiqa.DataAccess\Etiqa.DataAccess.csproj" />
     <ProjectReference Include="..\Etiqa.Domain\Etiqa.Domain.csproj" />
+    <ProjectReference Include="..\Etiqa.Providers\Etiqa.Providers.csproj" />
     <ProjectReference Include="..\Etiqa.Repository.Contract\Etiqa.Repository.Contract.csproj" />
     <ProjectReference Include="..\Etiqa.Repository\Etiqa.Repository.csproj" />
     <ProjectReference Include="..\Etiqa.Security\Etiqa.Security.csproj" />
