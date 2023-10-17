@@ -8,7 +8,7 @@ go
 create table [User]
 (
 	Id bigint IDENTITY(1,1) primary key,
-	Username varchar(100) NOT NULL unique,
+	Username varchar(20) NOT NULL unique,
 	Email varchar(100) NOT NULL unique,
 	PhoneNo varchar(20) NOT NULL,
 	Hobby varchar(100)
